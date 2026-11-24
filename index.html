@@ -162,17 +162,19 @@ nav .wrap{display:flex;align-items:center;gap:20px;height:60px}
 .course-cta small{color:var(--muted);font-size:13px}
 
 /* lecturer */
-.lecturer{margin-top:32px;display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:center}
+.lecturer{margin-top:40px;padding-top:32px;border-top:1px dashed var(--line);display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start}
 .lecturer .who .k{font-family:var(--font-latin);font-size:14px;font-weight:900;color:var(--accent);letter-spacing:.14em}
-.lecturer .who h3{font-size:22px;font-weight:900;margin:6px 0 2px}
-.lecturer .who .co{font-size:15px;color:var(--ink);font-weight:700}
-.lecturer .who p{margin-top:10px;color:var(--muted);font-size:14.5px;line-height:1.6;max-width:36em}
-.lecturer .who p.share{margin-top:8px}
-.lecturer .award{display:inline-flex;align-items:center;gap:8px;margin-top:12px;font-size:13px;font-weight:700;color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,#fff);padding:6px 14px;border-radius:999px}
+.lecturer .who h3{font-size:24px;font-weight:900;margin:8px 0 4px}
+.lecturer .who .co{font-size:14px;color:var(--muted);font-weight:700;margin-bottom:6px}
+.lecturer .who p{margin-top:14px;color:var(--muted);font-size:14.5px;line-height:1.75;max-width:36em}
+.lecturer .award{display:inline-flex;align-items:center;gap:8px;margin-top:18px;font-size:13px;font-weight:700;color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,#fff);padding:6px 14px;border-radius:999px}
 .lecturer .award::before{content:"★"}
-.lecturer .reel{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;max-width:300px}
+.lecturer .reel{max-width:340px}
+.lecturer .reel-cap{font-size:15px;font-weight:900;color:var(--ink);line-height:1.5;margin-bottom:12px}
+.lecturer .reel-cap::before{content:"▶";display:inline-block;color:var(--accent);margin-right:8px;font-size:13px}
+.lecturer .reel .frame{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
 .lecturer .reel iframe{display:block;width:100%;height:540px;border:0}
-.lecturer .reel-note{font-size:12px;color:var(--muted);text-align:center;padding:8px 10px;border-top:1px dashed var(--line)}
+.lecturer .reel-note{font-size:12px;color:var(--muted);text-align:center;padding:10px 10px 0}
 
 /* signup */
 .signup{padding:72px 0 88px;border-top:1px solid var(--line);background:linear-gradient(180deg,#fff, var(--mist));scroll-margin-top:60px}
@@ -193,7 +195,7 @@ footer{padding:24px 0;color:var(--muted);font-size:13px;text-align:center}
   .steps{grid-template-columns:1fr}
   .course-head{grid-template-columns:1fr;gap:6px}
   .lecturer{grid-template-columns:1fr}
-  .lecturer .reel{max-width:100%;margin:0 auto}
+  .lecturer .reel{max-width:340px;margin:8px auto 0}
   .navlinks a:not(.keep){display:none}
   .signup .box{padding:26px}
 }
@@ -322,13 +324,15 @@ footer{padding:24px 0;color:var(--muted);font-size:13px;text-align:center}
         <span class="k">特邀講師</span>
         <h3>趙育杰 Leo</h3>
         <div class="co">丞杰股份有限公司</div>
-        <p>結合 Alibaba.com 平台營運、AI 數據分析與團隊 SOP 推動外銷，曾有銷售額成長 176%、版圖拓展至逾 34 至 45 個國家。</p>
-        <p class="share">與您分享如何在人力有限的情況下，把公司既有的數位資產——產品照片、規格資料、店鋪數據與 CAD 檔案——接入 Accio Work 工作流程，從商品上架、數據分析到 3D 展示動畫，形成一套可重複使用的 AI 輔助營運方式。</p>
-        <span class="award">榮獲 亞太跨境AI代言人 殊榮</span>
+        <p>結合 Alibaba.com 平台營運、AI 數據分析與團隊 SOP 推動外銷，曾有銷售額成長 176%、版圖拓展至逾 34 至 45 個國家。榮獲亞太跨境AI代言人殊榮。</p>
+        <p>與您分享如何在人力有限的情況下，把公司既有的數位資產——產品照片、規格資料、店鋪數據與 CAD 檔案——接入 Accio Work 工作流程，從商品上架、數據分析到 3D 展示動畫，形成一套可重複使用的 AI 輔助營運方式。</p>
       </div>
       <div class="reel">
-        <iframe src="https://www.instagram.com/reel/DfkR3PLy1lw/embed" title="丞杰股份有限公司 Accio Work 應用影片" loading="lazy" scrolling="no" allowfullscreen></iframe>
-        <div class="reel-note">丞杰使用 Accio Work 的實際應用（Instagram 影片，點擊播放）</div>
+        <div class="reel-cap">看看丞杰如何將發佈商品流程<br>打造成一套可重複使用的 AI Agent</div>
+        <div class="frame">
+          <iframe src="https://www.instagram.com/reel/DfkR3PLy1lw/embed" title="丞杰股份有限公司 Accio Work 應用影片" loading="lazy" scrolling="no" allowfullscreen></iframe>
+        </div>
+        <div class="reel-note">丞杰使用 Accio Work 的實際應用｜Instagram 影片，點擊播放</div>
       </div>
     </div>
   </div>
