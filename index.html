@@ -56,6 +56,8 @@ nav .wrap{display:flex;align-items:center;gap:20px;height:60px}
 .hero h1 .answer{display:block;color:var(--ink)}
 .hero h1 .answer em{font-style:normal;background:linear-gradient(transparent 62%,rgba(239,106,31,.22) 62%)}
 .lede{color:var(--muted);font-size:17px;max-width:34em}
+.lede.highlight{margin-top:14px;font-size:17px;font-weight:900;color:var(--ink);background:linear-gradient(transparent 62%, color-mix(in srgb,var(--accent) 32%,transparent) 0);padding:2px 0}
+.h1sub{display:block;font-size:.42em;font-weight:800;color:var(--muted);letter-spacing:.1em;margin-top:6px}
 .hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
 .pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}
 .pill{font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:transform .2s,border-color .2s}
@@ -176,6 +178,27 @@ nav .wrap{display:flex;align-items:center;gap:20px;height:60px}
 .lecturer .reel iframe{display:block;width:100%;height:540px;border:0}
 .lecturer .reel-note{font-size:12px;color:var(--muted);text-align:center;padding:10px 10px 0}
 
+/* course gallery + lightbox */
+.gallery{margin-top:28px;padding-top:24px;border-top:1px dashed var(--line)}
+.gallery .gh{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.gallery .gh .k{font-family:var(--font-latin);font-size:12px;font-weight:800;color:var(--accent);letter-spacing:.1em}
+.gallery .gh b{font-size:17px;font-weight:900;color:var(--ink)}
+.gallery .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.shot{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;cursor:zoom-in;transition:transform .25s,box-shadow .25s;display:block;padding:0}
+.shot:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(22,32,42,.12)}
+.shot img{display:block;width:100%;height:auto;aspect-ratio:7/5;object-fit:cover;object-position:top}
+.shot .cap{padding:10px 14px 12px;border-top:1px dashed var(--line)}
+.shot .cap b{font-size:14px;color:var(--ink)}
+.shot .cap span{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+.shot .cap i{font-style:normal;font-family:var(--font-latin);font-size:11px;font-weight:800;color:var(--accent);letter-spacing:.1em}
+.shot .cap .zoom{color:var(--muted);font-size:11px;letter-spacing:0;float:right;margin-top:2px}
+.lb{display:none;position:fixed;inset:0;z-index:80;background:rgba(22,32,42,.72);backdrop-filter:blur(6px);padding:26px;overflow-y:auto;cursor:zoom-out}
+.lb.show{display:flex;align-items:flex-start;justify-content:center}
+.lb figure{margin:0;max-width:1080px;width:100%;background:#fff;border-radius:16px;overflow:hidden}
+.lb img{display:block;width:100%;height:auto}
+.lb figcaption{padding:14px 20px;font-size:14px;font-weight:700;color:var(--ink);border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.lb figcaption small{color:var(--muted);font-weight:400;font-size:12.5px}
+
 /* signup */
 .signup{padding:72px 0 88px;border-top:1px solid var(--line);background:linear-gradient(180deg,#fff, var(--mist));scroll-margin-top:60px}
 .signup .box{border:1px solid var(--line);background:#fff;border-radius:24px;padding:40px;display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center}
@@ -196,6 +219,7 @@ footer{padding:24px 0;color:var(--muted);font-size:13px;text-align:center}
   .course-head{grid-template-columns:1fr;gap:6px}
   .lecturer{grid-template-columns:1fr}
   .lecturer .reel{max-width:340px;margin:8px auto 0}
+  .gallery .grid{grid-template-columns:1fr}
   .navlinks a:not(.keep){display:none}
   .signup .box{padding:26px}
 }
@@ -226,9 +250,10 @@ footer{padding:24px 0;color:var(--muted);font-size:13px;text-align:center}
       <div class="eyebrow">台灣中小企業 B2B 外銷｜AI Agent 升星營銷實戰系列</div>
       <h1>
         <span class="strike">沒人力，做不完？</span>
-        <span class="answer">讓<em>沒人力</em>不再是問題</span>
+        <span class="answer">讓<em>沒人力</em>不再是問題<span class="h1sub">助力衝刺您的星等級</span></span>
       </h1>
       <p class="lede"><b style="color:var(--ink)">打造懂您的 AI Agent，一次解決台灣中小企業 B2B 外銷的三大人力痛點。</b>沒行銷底子、改一次要好幾天，這些卡關都有解法。三堂課從商品、業務到數據，每堂現場示範用 Smart Assistant Agent（SAA）搭配 Accio Work，帶著做好的成果回去。</p>
+      <p class="lede highlight">12 月三堂課程，打造您公司專屬的 AI Agent，助力您衝刺升星、迎戰 2027，為年後的新貿節備戰。</p>
       <div class="hero-cta">
         <a class="btn" href="https://alidocs.dingtalk.com/notable/share/form/v01yBRq1ZPAGVxQpOdv_1T7NCF3_tHZ23UO?source=link" target="_blank" rel="noopener">立即報名</a>
         <a class="btn" style="background:#fff;color:var(--ink);border:1px solid var(--line)" href="#course-1">先看課程內容</a>
@@ -262,14 +287,21 @@ footer{padding:24px 0;color:var(--muted);font-size:13px;text-align:center}
 </div>
 
 <!-- prompt modal -->
-<div class="overlay" id="overlay" aria-hidden="true">
-  <div class="panel" id="panel" role="dialog" aria-modal="true">
+<div class="overlay" id="overlay" aria-hidden="true">  <div class="panel" id="panel" role="dialog" aria-modal="true">
     <div class="panel-head">
       <h3 id="panelTitle"></h3>
       <button class="pclose" id="panelClose" aria-label="關閉">✕</button>
     </div>
     <div class="panel-body" id="panelBody"></div>
   </div>
+</div>
+
+<!-- image lightbox -->
+<div class="lb" id="lightbox" aria-hidden="true">
+  <figure>
+    <img id="lbImg" src="" alt="">
+    <figcaption><span id="lbCap"></span><small>點擊任意處或按 Esc 關閉</small></figcaption>
+  </figure>
 </div>
 
 <section class="path">
@@ -374,6 +406,24 @@ footer{padding:24px 0;color:var(--muted);font-size:13px;text-align:center}
           <div class="card"><span class="k">DASHBOARD</span><b>現場搭建您的業務團隊詢盤 Dashboard</b><p>知道哪個業務跟得好，哪個業務要加油</p></div>
         </div>
         <div class="course-cta"><a class="btn" href="https://alidocs.dingtalk.com/notable/share/form/v01yBRq1ZPAGVxQpOdv_1T7NCF3_tHZ23UO?source=link" target="_blank" rel="noopener">報名第二堂</a></div>      </div>
+    </div>
+
+    <div class="gallery reveal">
+      <div class="gh"><span class="k">DASHBOARD PREVIEW</span><b>課堂上您將現場搭建的詢盤 Dashboard 長這樣</b></div>
+      <div class="grid">
+        <button class="shot" data-img="course-img/inquiry-inventory.png" data-cap="盤點｜這週有哪些詢盤、哪些待盤活">
+          <img src="course-img/inquiry-inventory.png" alt="詢盤 Dashboard 盤點頁：本週新詢盤量、待活話量、服務回應時間與待處理事項" loading="lazy">
+          <span class="cap"><i>STEP 1</i><span class="zoom">🔍 點擊放大</span><b>盤點</b><span>這週有哪些詢盤、哪些待盤活</span></span>
+        </button>
+        <button class="shot" data-img="course-img/inquiry-review.png" data-cap="覆盤｜哪些詢盤回得好，哪些待加強">
+          <img src="course-img/inquiry-review.png" alt="詢盤 Dashboard 覆盤頁：帳號打分、服務速度與內容質量評分依據" loading="lazy">
+          <span class="cap"><i>STEP 2</i><span class="zoom">🔍 點擊放大</span><b>覆盤</b><span>哪些詢盤回得好，哪些待加強</span></span>
+        </button>
+        <button class="shot" data-img="course-img/inquiry-followup.png" data-cap="跟進｜追蹤詢盤跟進狀況">
+          <img src="course-img/inquiry-followup.png" alt="詢盤 Dashboard 跟進頁：詢盤明細、跟進策略與英文話術草稿" loading="lazy">
+          <span class="cap"><i>STEP 3</i><span class="zoom">🔍 點擊放大</span><b>跟進</b><span>追蹤詢盤跟進狀況</span></span>
+        </button>
+      </div>
     </div>
   </div>
 </section>
@@ -508,6 +558,20 @@ footer{padding:24px 0;color:var(--muted);font-size:13px;text-align:center}
     navigator.clipboard.writeText(text).then(()=>{
       btn.textContent='已複製 ✓'; btn.classList.add('done');
       setTimeout(()=>{btn.textContent='複製';btn.classList.remove('done')},1800);
+    });
+  });
+
+  // image lightbox
+  const lb=document.getElementById('lightbox'), lbImg=document.getElementById('lbImg'), lbCap=document.getElementById('lbCap');
+  function closeLb(){lb.classList.remove('show');lb.setAttribute('aria-hidden','true');document.body.style.overflow=''}
+  lb.addEventListener('click',closeLb);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lb.classList.contains('show'))closeLb()});
+  document.querySelectorAll('.shot').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      lbImg.src=btn.dataset.img; lbImg.alt=btn.querySelector('img').alt;
+      lbCap.textContent=btn.dataset.cap;
+      lb.classList.add('show'); lb.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
     });
   });
 
