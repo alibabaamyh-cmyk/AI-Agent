@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>讓沒人力不再是問題</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=LXGW+WenKai+TC:wght@400;700&family=Sora:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a clean white sheet; the merchant's inner "OS" (handwritten) is crossed out and answered by a typed AI Agent command. Each course owns one color. */
+:root{
+  --paper:#ffffff;
+  --mist:#f3f5f4;
+  --ink:#16202a;
+  --muted:#5d6872;
+  --line:#e3e7e6;
+  --c1:#ef6a1f;   /* 發品 */
+  --c2:#0f8a7c;   /* 詢盤 */
+  --c3:#3158e0;   /* 優化 */
+  --font-display:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --font-hand:"LXGW WenKai TC","Kaiti TC","DFKai-SB",serif;
+  --font-latin:"Sora","Noto Sans TC",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-display);line-height:1.75;font-size:16px;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+h1,h2,h3{text-wrap:balance;margin:0;line-height:1.25}
+p{margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+:focus-visible{outline:3px solid var(--c3);outline-offset:3px;border-radius:6px}
+
+/* nav */
+nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:20px;height:60px}
+.brand{font-family:var(--font-latin);font-weight:800;letter-spacing:.02em;font-size:15px;white-space:nowrap}
+.brand b{color:var(--c1)}
+.navlinks{display:flex;gap:6px;margin-left:auto;flex-wrap:nowrap;overflow-x:auto}
+.navlinks a{text-decoration:none;font-size:14px;padding:6px 12px;border-radius:999px;color:var(--muted);white-space:nowrap;transition:background .2s,color .2s}
+.navlinks a:hover{background:var(--mist);color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;border-radius:999px;padding:12px 22px;background:var(--ink);color:#fff;border:0;cursor:pointer;font-family:inherit;font-size:15px;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px rgba(22,32,42,.5)}
+.btn.sm{padding:8px 16px;font-size:14px}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding:64px 0 56px}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.eyebrow{font-family:var(--font-latin);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.hero h1{font-size:clamp(34px,5.2vw,60px);font-weight:900;margin:14px 0 18px;letter-spacing:-.01em}
+.strike{position:relative;font-family:var(--font-hand);font-weight:700;color:var(--muted);white-space:nowrap}
+.strike::after{content:"";position:absolute;left:-2%;top:54%;height:5px;width:104%;background:var(--c1);border-radius:4px;transform-origin:left;transform:scaleX(1);animation:strike 1.1s .5s cubic-bezier(.7,0,.2,1) both}
+@keyframes strike{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero h1 .answer{display:block;color:var(--ink)}
+.hero h1 .answer em{font-style:normal;background:linear-gradient(transparent 62%,rgba(239,106,31,.22) 62%)}
+.lede{color:var(--muted);font-size:17px;max-width:34em}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}
+.pill{font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:transform .2s,border-color .2s}
+.pill:hover{transform:translateY(-2px)}
+.pill i{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* agent demo */
+.demo{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 60px -36px rgba(22,32,42,.35);overflow:hidden}
+.demo-top{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--mist)}
+.demo-top span{width:10px;height:10px;border-radius:50%;background:#d6dbda}
+.demo-top strong{margin-left:8px;font-family:var(--font-latin);font-size:13px;color:var(--muted);font-weight:600}
+.demo-body{padding:18px;display:grid;gap:14px;min-height:340px}
+.os-bubble{font-family:var(--font-hand);font-size:18px;background:var(--mist);border-radius:16px 16px 16px 4px;padding:12px 16px;justify-self:start;max-width:92%;color:var(--ink);transition:opacity .35s}
+.os-bubble small{display:block;font-family:var(--font-latin);font-size:11px;letter-spacing:.12em;color:var(--muted)}
+.cmd{justify-self:end;max-width:96%;background:var(--ink);color:#fff;border-radius:16px 16px 4px 16px;padding:12px 16px;font-size:14px;min-height:48px}
+.cmd .caret{display:inline-block;width:2px;height:1em;background:#fff;vertical-align:-2px;margin-left:2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.outs{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.outs li{display:flex;align-items:center;gap:10px;font-size:14px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;transition:opacity .3s,transform .3s}
+.outs li .tick{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:12px;flex:none;background:var(--accent,var(--c1))}
+.outs li.wait{opacity:.35;transform:translateX(6px)}
+.outs li.wait .tick{background:var(--line)}
+
+/* marquee: solution pills (click → prompt modal) */
+.marquee{border-block:1px solid var(--line);background:var(--mist);overflow:hidden;padding:12px 0 14px}
+.marquee-cap{text-align:center;font-size:12px;letter-spacing:.14em;color:var(--muted);font-weight:700;margin:0 0 10px;font-family:var(--font-latin)}
+.track{display:flex;gap:14px;width:max-content;animation:scroll 48s linear infinite}
+.marquee:hover .track{animation-play-state:paused}
+.track button{font-family:var(--font-hand);font-size:17px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 16px;white-space:nowrap;cursor:pointer;color:var(--ink);display:inline-flex;align-items:center;gap:8px;transition:border-color .2s,background .2s,transform .2s}
+.track button i{width:7px;height:7px;border-radius:50%;display:inline-block;flex:none}
+.track button:hover{border-color:var(--c1);transform:translateY(-2px)}
+@keyframes scroll{to{transform:translateX(-50%)}}
+
+/* prompt modal */
+.overlay{display:none;position:fixed;inset:0;background:rgba(22,32,42,.42);z-index:60;backdrop-filter:blur(6px);animation:fadeIn .2s ease}
+.overlay.show{display:flex;align-items:center;justify-content:center;padding:20px}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+#panel{background:#fff;border-radius:22px;width:100%;max-width:720px;max-height:86vh;overflow-y:auto;box-shadow:0 24px 80px rgba(22,32,42,.28);animation:slideUp .3s cubic-bezier(.22,.61,.36,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+#panel .panel-head{position:sticky;top:0;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:22px 26px 16px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-radius:22px 22px 0 0;z-index:1}
+#panel .panel-head h3{font-size:20px;font-weight:900}
+.pclose{width:34px;height:34px;border-radius:50%;border:0;background:var(--mist);font-size:15px;cursor:pointer;color:var(--muted);flex:none;display:grid;place-items:center;transition:background .2s,color .2s}
+.pclose:hover{background:var(--ink);color:#fff}
+#panel .panel-body{padding:22px 26px 28px}
+#panel .panel-body .pd{color:var(--muted);font-size:14px}
+#panel .panel-body h4{font-size:15px;margin:18px 0 8px}
+#panel .panel-body h4:first-of-type{margin-top:4px}
+.pw{background:var(--mist);border:1px solid var(--line);border-radius:14px;margin:0 0 18px;overflow:hidden}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line);background:rgba(22,32,42,.03)}
+.ph .pl{font-size:11px;letter-spacing:.1em;color:var(--c3);font-weight:800;display:flex;align-items:center;gap:6px;font-family:var(--font-latin)}
+.ph .pl::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c3)}
+.copybtn{padding:6px 16px;font-size:12px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer;font-weight:700;color:var(--muted);font-family:inherit;transition:background .2s,color .2s,border-color .2s}
+.copybtn:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.copybtn.done{background:var(--c2);color:#fff;border-color:var(--c2)}
+.pw pre{margin:0;padding:16px;font-size:12.5px;font-family:"SF Mono",Consolas,Menlo,monospace;white-space:pre-wrap;word-break:break-word;line-height:1.7;color:var(--ink);max-height:280px;overflow-y:auto}
+
+/* path */
+.path{padding:64px 0 20px}
+.path h2{font-size:clamp(24px,3.2vw,34px);font-weight:900}
+.path p.sub{color:var(--muted);margin-top:8px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px;position:relative}
+.step{border:1px solid var(--line);border-radius:18px;padding:20px;text-decoration:none;background:#fff;position:relative;transition:transform .25s,box-shadow .25s,border-color .25s}
+.step:hover{transform:translateY(-4px);box-shadow:0 18px 36px -24px rgba(22,32,42,.4);border-color:var(--accent)}
+.step .num{font-family:var(--font-latin);font-weight:800;font-size:13px;color:var(--accent);letter-spacing:.1em}
+.step h3{font-size:20px;margin:6px 0 4px}
+.step p{color:var(--muted);font-size:14px}
+.step .bar{height:4px;border-radius:4px;background:var(--line);margin-top:16px;overflow:hidden}
+.step .bar i{display:block;height:100%;width:100%;background:var(--accent);transform-origin:left;animation:grow 1.4s ease-out both}
+.step:nth-child(2) .bar i{animation-delay:.4s}.step:nth-child(3) .bar i{animation-delay:.8s}
+@keyframes grow{from{transform:scaleX(0)}}
+
+/* course */
+.course{padding:72px 0;border-top:1px solid var(--line);scroll-margin-top:60px}
+.course-head{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:start}
+.bignum{font-family:var(--font-latin);font-weight:800;font-size:clamp(64px,9vw,120px);line-height:.9;color:transparent;-webkit-text-stroke:2px var(--accent);letter-spacing:-.04em}
+.tag{display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:700;color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,#fff);padding:5px 12px;border-radius:999px}
+.course h2{font-size:clamp(26px,3.8vw,42px);font-weight:900;margin:12px 0 10px}
+.h2sub{display:block;font-size:.55em;font-weight:700;color:var(--accent);letter-spacing:.08em;margin-top:8px}
+.course .subtitle{font-size:18px;font-weight:500;color:var(--ink);border-left:4px solid var(--accent);padding-left:14px;max-width:40em}
+.intro{margin-top:24px;color:var(--muted);max-width:40em;font-size:16px}
+.cols{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;margin-top:40px}
+.panel h3{font-size:15px;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.panel h3::before{content:"";width:22px;height:3px;border-radius:3px;background:var(--accent)}
+.fit{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.fit li{position:relative;display:flex;gap:14px;align-items:flex-start;padding:13px 6px;border-bottom:1px dashed var(--line);background:transparent;transition:transform .2s}
+.fit li:first-child{padding-top:4px}
+.fit li:last-child{border-bottom:0}
+.fit li:hover{transform:translateX(4px)}
+.fit li .q{font-family:var(--font-hand);font-size:24px;line-height:1;color:var(--accent);flex:none;margin-top:3px;opacity:.9}
+.fit li .t{font-size:15.5px;line-height:1.55}
+.fit li .t span{display:block;font-family:var(--font-hand);font-size:15.5px;color:var(--muted);margin-top:3px}
+.must{display:inline-block;font-size:12px;font-weight:700;color:#fff;background:var(--accent);padding:2px 10px;border-radius:999px;margin-left:6px;vertical-align:2px;animation:pulse 2.2s ease-in-out infinite}
+.panel .fit .must{position:relative;top:-2px}
+@keyframes pulse{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 18%,transparent)}}
+.gain{display:grid;gap:0}
+.gain .card{padding:14px 6px;border-bottom:1px dashed var(--line);background:transparent;position:relative;transition:transform .2s}
+.gain .card:last-child{border-bottom:0}
+.gain .card:hover{transform:translateX(4px)}
+.gain .card b{display:block;font-size:16px}
+.gain .card p{font-size:14px;color:var(--muted);margin-top:4px}
+.gain .card .k{font-family:var(--font-latin);font-size:12px;font-weight:800;color:var(--accent);letter-spacing:.1em}
+.course-cta{margin-top:24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.course-cta .btn{background:var(--accent)}
+.course-cta small{color:var(--muted);font-size:13px}
+
+/* lecturer */
+.lecturer{margin-top:32px;display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:center}
+.lecturer .who .k{font-family:var(--font-latin);font-size:14px;font-weight:900;color:var(--accent);letter-spacing:.14em}
+.lecturer .who h3{font-size:22px;font-weight:900;margin:6px 0 2px}
+.lecturer .who .co{font-size:15px;color:var(--ink);font-weight:700}
+.lecturer .who p{margin-top:10px;color:var(--muted);font-size:14.5px;line-height:1.6;max-width:36em}
+.lecturer .who p.share{margin-top:8px}
+.lecturer .award{display:inline-flex;align-items:center;gap:8px;margin-top:12px;font-size:13px;font-weight:700;color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,#fff);padding:6px 14px;border-radius:999px}
+.lecturer .award::before{content:"★"}
+.lecturer .reel{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;max-width:300px}
+.lecturer .reel iframe{display:block;width:100%;height:540px;border:0}
+.lecturer .reel-note{font-size:12px;color:var(--muted);text-align:center;padding:8px 10px;border-top:1px dashed var(--line)}
+
+/* signup */
+.signup{padding:72px 0 88px;border-top:1px solid var(--line);background:linear-gradient(180deg,#fff, var(--mist));scroll-margin-top:60px}
+.signup .box{border:1px solid var(--line);background:#fff;border-radius:24px;padding:40px;display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center}
+.signup h2{font-size:clamp(26px,3.6vw,40px);font-weight:900}
+.signup p{color:var(--muted);margin-top:10px}
+.info{display:grid;gap:10px;font-size:15px}
+.info div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed var(--line);padding-bottom:8px}
+.info span{color:var(--muted)}
+footer{padding:24px 0;color:var(--muted);font-size:13px;text-align:center}
+
+/* reveal: visible at rest, only nudges into place */
+.reveal{transition:transform .7s cubic-bezier(.2,.7,.2,1),opacity .7s}
+.reveal.lift{transform:translateY(18px);opacity:.55}
+
+@media (max-width:860px){
+  .hero .wrap,.cols,.signup .box{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .course-head{grid-template-columns:1fr;gap:6px}
+  .lecturer{grid-template-columns:1fr}
+  .lecturer .reel{max-width:100%;margin:0 auto}
+  .navlinks a:not(.keep){display:none}
+  .signup .box{padding:26px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal.lift{transform:none;opacity:1}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">讓沒人力<b>不再是問題</b></div>
+    <div class="navlinks">
+      <a href="#course-1">第一堂 商品即業務</a>
+      <a href="#course-2">第二堂 AI 業務戰力</a>
+      <a href="#course-3">第三堂 數據找卡點</a>
+      <a class="keep btn sm" href="https://alidocs.dingtalk.com/notable/share/form/v01yBRq1ZPAGVxQpOdv_wIwPYkx_BdNcDCA?source=link" target="_blank" rel="noopener">我要報名</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <canvas id="dots" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">台灣中小企業 B2B 外銷｜AI Agent 升星營銷實戰系列</div>
+      <h1>
+        <span class="strike">沒人力，做不完？</span>
+        <span class="answer">讓<em>沒人力</em>不再是問題</span>
+      </h1>
+      <p class="lede"><b style="color:var(--ink)">打造懂您的 AI Agent，一次解決台灣中小企業 B2B 外銷的三大人力痛點。</b>沒行銷底子、改一次要好幾天，這些卡關都有解法。三堂課從商品、業務到數據，每堂現場示範用 Smart Assistant Agent（SAA）搭配 Accio Work，帶著做好的成果回去。</p>
+      <div class="hero-cta">
+        <a class="btn" href="https://alidocs.dingtalk.com/notable/share/form/v01yBRq1ZPAGVxQpOdv_wIwPYkx_BdNcDCA?source=link" target="_blank" rel="noopener">立即報名</a>
+        <a class="btn" style="background:#fff;color:var(--ink);border:1px solid var(--line)" href="#course-1">先看課程內容</a>
+      </div>
+      <div class="pill-row">
+        <a class="pill" href="#course-1"><i style="background:var(--c1)"></i>01 商品即業務</a>
+        <a class="pill" href="#course-2"><i style="background:var(--c2)"></i>02 AI 業務戰力</a>
+        <a class="pill" href="#course-3"><i style="background:var(--c3)"></i>03 數據找卡點</a>
+      </div>
+    </div>
+
+    <div class="demo" aria-label="AI Agent 示範">
+      <div class="demo-top"><span></span><span></span><span></span>      <strong>SAA · Smart Assistant Agent</strong></div>
+      <div class="demo-body">
+        <div class="os-bubble" id="os"><small>商家 OS</small>        <span id="osText">只有幾年前的中文型錄，要怎麼生出數百支產品？</span></div>
+        <div class="cmd" id="cmd"><span id="cmdText">根據這份型錄，幫我產出英文標題、關鍵字、詳情頁文案、配圖提示詞和 CTA</span><span class="caret"></span></div>
+        <ul class="outs" id="outs">
+          <li><span class="tick">✓</span>英文標題＋關鍵字</li>
+          <li><span class="tick">✓</span>詳情頁文案</li>
+          <li><span class="tick">✓</span>賣點配圖提示詞</li>
+          <li><span class="tick">✓</span>引導詢盤的 CTA</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="marquee" aria-label="AI Agent 解決方案">
+  <p class="marquee-cap">AI AGENT 能幫您解決的日常任務 · 點一下就能拿走 Prompt</p>
+  <div class="track" id="track"></div>
+</div>
+
+<!-- prompt modal -->
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="panel" id="panel" role="dialog" aria-modal="true">
+    <div class="panel-head">
+      <h3 id="panelTitle"></h3>
+      <button class="pclose" id="panelClose" aria-label="關閉">✕</button>
+    </div>
+    <div class="panel-body" id="panelBody"></div>
+  </div>
+</div>
+
+<section class="path">
+  <div class="wrap">
+    <h2>三堂課，對應商家最常卡住的三段</h2>
+    <p class="sub">先把商品發好，再接住詢盤，最後放大流量。三堂連上效果最好，也可以只報最痛的那一堂。</p>
+    <div class="steps">
+      <a class="step reveal" href="#course-1" style="--accent:var(--c1)"><div class="num">STEP 01</div><h3>商品即業務</h3><p>讓每支商品都替您做業務，打造商品業務力</p><div class="bar"><i></i></div></a>
+      <a class="step reveal" href="#course-2" style="--accent:var(--c2)"><div class="num">STEP 02</div><h3>AI 業務戰力</h3><p>懂買家、懂產品、懂報價、會跟進</p><div class="bar"><i></i></div></a>
+      <a class="step reveal" href="#course-3" style="--accent:var(--c3)"><div class="num">STEP 03</div><h3>數據找卡點</h3><p>看懂站台經營數據，讓 AI 直接調整</p><div class="bar"><i></i></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- COURSE 1 -->
+<section class="course" id="course-1" style="--accent:var(--c1)">
+  <div class="wrap">
+    <div class="course-head reveal">
+      <div class="bignum">01</div>
+      <div>
+        <span class="tag">第一堂</span><span class="tag">12/10（四）14:00–16:00</span>
+        <h2>商品即業務．打造您的商品業務力</h2>
+        <p class="subtitle">沒人力、沒行銷底子也沒關係，用 Smart Assistant Agent（SAA）搭配 Accio Work，把工廠優勢寫成買家看得懂、願意詢盤的商品</p>
+      </div>
+    </div>
+    <p class="intro reveal">現在生文案、做圖都不難了，難的是每家的起點不一樣。有人只有幾年前的中文型錄，有人發了幾百支品卻沒人點。這堂課不給一套通用模板，而是拆解真實商家的情境，現場示範怎麼搭配 Smart Assistant Agent（SAA）與 Accio Work，把工廠優勢轉成有轉化力的標題、詳情頁與圖片，快速補齊產品。</p>
+
+    <div class="cols">
+      <div class="panel reveal">
+        <h3>適合對象</h3>
+        <ul class="fit">
+          <li><span class="q">“</span><div class="t">進國際站超過 3 個月，發品只有 50 支<span class="must">請您一定要來聽</span></div></li>
+          <li><span class="q">“</span><div class="t">發了幾百支品，但沒人點擊、沒效果<span>「發這麼多，到底哪裡不對？」</span></div></li>
+          <li><span class="q">“</span><div class="t">一人身兼多職，沒有人力專門發品、做圖<span>「老闆是我、業務是我、美編也是我。」</span></div></li>
+          <li><span class="q">“</span><div class="t">沒有數位行銷底子，不知道買家想看什麼</div></li>
+          <li><span class="q">“</span><div class="t">知道工廠優勢，但要寫成買家看得懂、又有轉化力的內容，真的好難</div></li>
+          <li><span class="q">“</span><div class="t">只有幾年前的中文型錄或老式網站，想快速補齊產品內容<span>「只有型錄，也能生出數百支產品嗎？」</span></div></li>
+        </ul>
+      </div>
+      <div class="panel reveal">
+        <h3>您會收穫</h3>
+        <div class="gain">
+          <div class="card"><span class="k">WORKFLOW</span><b>靈活搭配 SAA 與 Accio Work</b><p>知道什麼情境用哪個工具、怎麼串在一起最省時</p></div>
+          <div class="card"><span class="k">ON SITE</span><b>收穫不同場景批量上架產品的 Prompt</b><p>準備好您的產品 URL、產品圖片或型錄，現在立即生成</p></div>
+          <div class="card"><span class="k">CHECKLIST</span><b>發品自檢表</b><p>對照標題、內容、CTA，快速找出卡關點</p></div>
+        </div>
+        <div class="course-cta"><a class="btn" href="https://alidocs.dingtalk.com/notable/share/form/v01yBRq1ZPAGVxQpOdv_wIwPYkx_BdNcDCA?source=link" target="_blank" rel="noopener">報名第一堂</a><small>建議帶：型錄、舊網站連結或產品資料</small></div>
+      </div>
+    </div>
+    <div class="lecturer reveal">
+      <div class="who">
+        <span class="k">特邀講師</span>
+        <h3>趙育杰 Leo</h3>
+        <div class="co">丞杰股份有限公司</div>
+        <p>結合 Alibaba.com 平台營運、AI 數據分析與團隊 SOP 推動外銷，曾有銷售額成長 176%、版圖拓展至逾 34 至 45 個國家。</p>
+        <p class="share">與您分享如何在人力有限的情況下，把公司既有的數位資產——產品照片、規格資料、店鋪數據與 CAD 檔案——接入 Accio Work 工作流程，從商品上架、數據分析到 3D 展示動畫，形成一套可重複使用的 AI 輔助營運方式。</p>
+        <span class="award">榮獲 亞太跨境AI代言人 殊榮</span>
+      </div>
+      <div class="reel">
+        <iframe src="https://www.instagram.com/reel/DfkR3PLy1lw/embed" title="丞杰股份有限公司 Accio Work 應用影片" loading="lazy" scrolling="no" allowfullscreen></iframe>
+        <div class="reel-note">丞杰使用 Accio Work 的實際應用（Instagram 影片，點擊播放）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURSE 2 -->
+<section class="course" id="course-2" style="--accent:var(--c2)">
+  <div class="wrap">
+    <div class="course-head reveal">
+      <div class="bignum">02</div>
+      <div>
+        <span class="tag">第二堂</span><span class="tag">12/17（四）14:00–16:00</span>
+        <h2>讓您的 AI 成為超強業務戰力<span class="h2sub">懂買家．懂產品．懂報價．會跟進</span></h2>
+        <p class="subtitle">不是外貿業務出身也能接單，讓 Smart Assistant Agent（SAA）與 Accio Work 當您的業務助理，從讀懂買家、回覆、報價到追單</p>
+      </div>
+    </div>
+    <p class="intro reveal">有詢盤卻不知道怎麼回、報價怕報錯、報完價就石沉大海，是許多工廠型商家的日常。頂尖外貿業務員難找，這堂課用 Smart Assistant Agent（SAA）與 Accio Work 當您的 Top Sales，針對真實詢盤情境，現場示範判斷買家意圖、寫出專業英文回覆、設計追單節奏，並從 RFQ 挑出真正適合您的商機。</p>
+
+    <div class="cols">
+      <div class="panel reveal">
+        <h3>適合對象</h3>
+        <ul class="fit">
+          <li><span class="q">“</span><div class="t">不是外貿業務出身，收到英文詢盤就緊張</div></li>
+          <li><span class="q">“</span><div class="t">白天跑工廠，晚上才回詢盤<span>「客戶早就問別家了。」</span></div></li>
+          <li><span class="q">“</span><div class="t">每封詢盤都認真回，結果一堆問完價就消失</div></li>
+          <li><span class="q">“</span><div class="t">報完價石沉大海，不知道怎麼追才不失禮</div></li>
+          <li><span class="q">“</span><div class="t">買家問規格、認證、MOQ，不知道怎麼回才專業</div></li>
+          <li><span class="q">“</span><div class="t">看了一堆 RFQ 商機，就是沒看到適合自己的</div></li>
+          <li><span class="q">“</span><div class="t">只有一個人兼業務，詢盤一多就漏接<span>「國際站的詢盤都不準啦！」</span></div></li>
+        </ul>
+      </div>
+      <div class="panel reveal">
+        <h3>您會收穫</h3>
+        <div class="gain">
+          <div class="card"><span class="k">RFQ 技巧</span><b>解決用關鍵詞／類目找不到 RFQ 的窘境</b><p>冷門產品如何海量調用 RFQ 搜索技巧</p></div>
+          <div class="card"><span class="k">WORKFLOW</span><b>靈活搭配生意助手設定邊界</b><p>什麼時候該回，什麼時候停下來</p></div>
+          <div class="card"><span class="k">ON SITE</span><b>快速確認近期詢盤狀況</b><p>哪些值得跟進、值得盤活，直接動手 AI 跟進</p></div>
+          <div class="card"><span class="k">DASHBOARD</span><b>現場搭建您的業務團隊詢盤 Dashboard</b><p>知道哪個業務跟得好，哪個業務要加油</p></div>
+        </div>
+        <div class="course-cta"><a class="btn" href="https://alidocs.dingtalk.com/notable/share/form/v01yBRq1ZPAGVxQpOdv_wIwPYkx_BdNcDCA?source=link" target="_blank" rel="noopener">報名第二堂</a></div>      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURSE 3 -->
+<section class="course" id="course-3" style="--accent:var(--c3)">
+  <div class="wrap">
+    <div class="course-head reveal">
+      <div class="bignum">03</div>
+      <div>
+        <span class="tag">第三堂</span><span class="tag">12/24（四）14:00–16:00</span>
+        <h2>看懂經營數據、找到卡點，讓 AI 直接調整</h2>
+        <p class="subtitle">看不懂數據、不知道好在哪裡、不好在哪裡，該怎麼做怎麼改？AI Agent 不只完整健檢，直接調整</p>
+      </div>
+    </div>
+    <p class="intro reveal">數據解讀，每個人不一樣，到底該看什麼數據？數據代表意義是什麼？許您一個 24 小時貼身 AI 數據分析師 Agent，讓您看懂趨勢，清楚客戶需求，知道哪裡沒做好；再給您一個 24 小時不間斷的運營 Agent，幫您調整，幫您跟進，競爭力 UP UP！</p>
+
+    <div class="cols">
+      <div class="panel reveal">
+        <h3>適合對象</h3>
+        <ul class="fit">
+          <li><span class="q">“</span><div class="t">看不懂後台數據報告</div></li>
+          <li><span class="q">“</span><div class="t">看懂數據差在哪，但不知道怎麼改</div></li>
+          <li><span class="q">“</span><div class="t">沒有人力優化站台</div></li>
+          <li><span class="q">“</span><div class="t">要優化的項目太多，不知道哪個最先要調整</div></li>
+          <li><span class="q">“</span><div class="t">優化後真的有效果嗎？怎麼追蹤</div></li>
+        </ul>
+      </div>
+      <div class="panel reveal">
+        <h3>您會收穫</h3>
+        <div class="gain">
+          <div class="card"><span class="k">PROMPTS</span><b>店鋪健檢提示詞</b><p>之後自己就能讓 Agent 重做診斷，不用每次等人幫</p></div>
+          <div class="card"><span class="k">WORKFLOW</span><b>靈活搭配 SAA 與 Accio Work</b><p>從數據診斷到批量調整，一輪對話完成</p></div>
+          <div class="card"><span class="k">ON SITE</span><b>您的店鋪診斷＋優化優先順序</b><p>回去先做哪 3 件事，現場就排好</p></div>
+        </div>
+        <div class="course-cta"><a class="btn" href="https://alidocs.dingtalk.com/notable/share/form/v01yBRq1ZPAGVxQpOdv_wIwPYkx_BdNcDCA?source=link" target="_blank" rel="noopener">報名第三堂</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="signup" id="signup">
+  <div class="wrap">
+    <div class="box reveal">
+      <div>
+        <h2>帶一個卡住的問題來，帶一套做好的成果回去</h2>
+        <p>名額有限，請盡早登記。</p>
+        <div class="hero-cta"><a class="btn" href="https://alidocs.dingtalk.com/notable/share/form/v01yBRq1ZPAGVxQpOdv_wIwPYkx_BdNcDCA?source=link" target="_blank" rel="noopener">立即報名</a></div>
+      </div>
+      <div class="info">
+        <div><span>上課日期</span><b>12/10、12/17、12/24（四）</b></div>
+        <div><span>地點</span><b>線上直播（報名後取得直播連結）</b></div>
+        <div><span>每堂時長</span><b>14:00–16:00（2 小時）</b></div>
+        <div><span>適合</span><b>國際站商家</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>讓沒人力不再是問題｜打造懂您的 AI Agent，解決台灣中小企業 B2B 外銷的三大人力痛點</footer>
+
+<script>
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // marquee: solution pills → click opens prompt modal
+  const sols=[
+    {t:'型錄批量發品',c:'var(--c1)',desc:'幾年前的中文型錄也能快速生出可上架產品。',prompts:[
+      {l:'型錄轉商品',p:`你是一個阿里國際站發品專家。\n\n我把一份中文型錄（或舊網站連結）提供給你，請幫我：\n\n1. 解析型錄中的每個產品\n2. 為每個產品生成英文標題（128 字符內）、關鍵字、詳情頁文案\n3. 產生賣點配圖提示詞與引導詢盤的 CTA\n\n輸出格式：表格列出每個產品的標題／關鍵字／詳情頁文案，可直接複製上架。`},
+      {l:'舊網站改版發品',p:`參考我的舊網站 [貼上連結]，內容和圖片都需要大幅調整。請幫我：\n\n1. 盤點網站上所有產品與賣點\n2. 重新撰寫符合國際站買家搜尋習慣的標題與詳情頁\n3. 標出哪裡該補圖、該補什麼圖（白底／場景／工藝）\n\n目標：快速補齊產品上架。`}
+    ]},
+    {t:'詢盤意圖判斷',c:'var(--c2)',desc:'收到英文詢盤不再緊張，先判斷再回覆。',prompts:[
+      {l:'買家意圖分析',p:`幫我分析這封詢盤的買家意圖：\n\n[貼上詢盤內容]\n\n請輸出：\n1. 買家意向分級（高／中／低）與理由\n2. 建議優先回覆順序\n3. 需補問的問題清單（規格、認證、MOQ）\n4. 英文回覆草稿\n5. 報價後的追單訊息`},
+      {l:'專業英文回覆',p:`買家問了規格、認證與 MOQ：\n\n[貼上買家的問題]\n\n請以專業外貿業務口吻撰寫英文回覆，語氣自信不卑不亢，結尾附引導下一步動作的 CTA。`}
+    ]},
+    {t:'RFQ 商機挖掘',c:'var(--c2)',desc:'冷門產品也能海量找到適合的 RFQ。',prompts:[
+      {l:'冷門品 RFQ 搜索',p:`我的產品比較冷門：[產品名／關鍵詞]。用關鍵詞／類目都找不到合適 RFQ。\n\n請幫我：\n1. 擴展同義詞、上下游產品詞、應用場景詞\n2. 給出海量調用 RFQ 搜索的策略\n3. 篩選真正適合我供應鏈的商機`}
+    ]},
+    {t:'店鋪數據健檢',c:'var(--c3)',desc:'把後台數據交給 AI，找出卡在哪一段。',prompts:[
+      {l:'店鋪健檢提示詞',p:`這是我近 30 天的店鋪數據（已去識別化）：\n\n[貼上數據]\n\n請幫我：\n1. 分析曝光 → 點擊 → 詢盤三段漏斗，找出卡在哪一段\n2. 排出優化優先順序（先做哪 3 件事）\n3. 給出批量優化建議與追蹤方式`},
+      {l:'優化成效追蹤',p:'優化調整後，幫我對比前後 30 天數據，驗證哪個動作有效、哪個無效，並調整下一步方向。'}
+    ]},
+    {t:'廣告投放判斷',c:'var(--c3)',desc:'什麼狀況該下、什麼狀況先不要下。',prompts:[
+      {l:'廣告判斷',p:`幫我評估現在該不該下廣告：\n\n目前狀況：[流量／點擊／詢盤現況]\n\n請從曝光、點擊率、詢盤轉化三段判斷我的基礎是否站穩，再決定投放時機與建議預算。`}
+    ]},
+    {t:'詳情頁優化',c:'var(--c1)',desc:'工廠優勢寫成買家看得懂、願意詢盤的內容。',prompts:[
+      {l:'詳情頁優化',p:`你是一個阿里國際站詳情頁優化專家。\n\n請優化這個產品的詳情頁：[貼上產品連結或內容]\n\n按 B2B 買家決策邏輯重構：\n1. 標題（128 字符）：核心關鍵詞＋屬性詞＋應用場景＋買家價值\n2. 賣點（2000 字符）：核心賣點 → 定制能力 → 產品參數 → 質量保證 → 應用場景 → 售後服務\n3. 關鍵詞埋詞：核心詞＋長尾詞＋場景詞＋買家意圖詞`}
+    ]},
+    {t:'買家背調',c:'var(--c2)',desc:'回覆前先搞懂對方是誰、值不值得跟。',prompts:[
+      {l:'買家背調',p:`你是一個 B2B 買家背調助手。分析這個買家：\n\n[公司名／姓名／郵箱／國家]\n\n請搜索 LinkedIn、官網、海關數據，輸出：公司概況、採購規模、供應鏈關係、信用評估（高／中／低風險）、跟進策略建議。`}
+    ]},
+    {t:'跟單節奏設計',c:'var(--c2)',desc:'報完價不再石沉大海，追單不失禮。',prompts:[
+      {l:'追單節奏',p:`幫我設計報價後的追單節奏：\n\n客戶狀況：[報價時間／最後互動內容]\n\n請規劃 3 次追單的時間點、各次切入角度（新資訊／案例／政策）與英文訊息草稿，語氣專業不失禮。`}
+    ]},
+    {t:'批量圖片生成',c:'var(--c1)',desc:'白底、場景、工藝圖一句話搞定。',prompts:[
+      {l:'五圖套餐',p:`幫我為這款產品設計 5 張副圖（1000×1000）：\n\n1. 工藝流程圖（原料→出貨）\n2. 產品分類圖\n3. 認證組合圖（ISO/SGS/CE＋工廠照）\n4. 應用場景圖\n5. 售後 FAQ 圖（MOQ／交期／定制／運費）\n\n產品：[描述或貼圖]`}
+    ]},
+    {t:'每日經營日報',c:'var(--c3)',desc:'一張日報看清昨天做得怎麼樣。',prompts:[
+      {l:'經營日報',p:`請根據我的後台數據生成今日經營日報：\n\n1. 昨日核心指標（曝光／點擊／點擊率／詢盤／訂單）\n2. 與前日對比（↑↓ 幅度）\n3. 異常檢測（波動 >20% 預警）\n4. 今日建議優先處理的 3 件事`}
+    ]},
+    {t:'多語客服回覆',c:'var(--c2)',desc:'時差不再是漏接詢盤的理由。',prompts:[
+      {l:'多語回覆',p:`幫我針對時差安排詢盤回覆策略，並為常見問題（規格、MOQ、交期、認證）生成英文／西語／小語種的模板回覆，讓夜間詢盤也不漏接。`}
+    ]}
+  ];
+  const track = document.getElementById('track');
+  track.innerHTML = sols.concat(sols).map(s=>`<button data-s="${s.t}"><i style="background:${s.c}"></i>${s.t} →</button>`).join('');
+  track.addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    openPrompt(sols.find(s=>s.t===b.dataset.s));
+  });
+
+  // prompt modal
+  const overlay=document.getElementById('overlay'), panel=document.getElementById('panel');
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+  function openPrompt(s){
+    document.getElementById('panelTitle').textContent=s.t;
+    let body=`<p class="pd">${s.desc}</p>`;
+    (s.prompts||[]).forEach(p=>{
+      body+=`<h4>${p.l}</h4><div class="pw"><div class="ph"><span class="pl">可複製 PROMPT</span><button class="copybtn">複製</button></div><pre>${esc(p.p)}</pre></div>`;
+    });
+    document.getElementById('panelBody').innerHTML=body;
+    overlay.classList.add('show'); overlay.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+  function closePrompt(){overlay.classList.remove('show');overlay.setAttribute('aria-hidden','true');document.body.style.overflow=''}
+  document.getElementById('panelClose').addEventListener('click',closePrompt);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closePrompt()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closePrompt()});
+  document.getElementById('panelBody').addEventListener('click',e=>{
+    const btn=e.target.closest('.copybtn'); if(!btn) return;
+    const text=btn.closest('.pw').querySelector('pre').textContent.trim();
+    navigator.clipboard.writeText(text).then(()=>{
+      btn.textContent='已複製 ✓'; btn.classList.add('done');
+      setTimeout(()=>{btn.textContent='複製';btn.classList.remove('done')},1800);
+    });
+  });
+
+  // reveal (content stays visible; below-fold items only nudge into place)
+  if(!reduce && 'IntersectionObserver' in window){
+    const els=[...document.querySelectorAll('.reveal')];
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('lift');io.unobserve(e.target);}}),{threshold:.12});
+    els.forEach(el=>{const r=el.getBoundingClientRect(); if(r.top>innerHeight){el.classList.add('lift');io.observe(el);}});
+  }
+
+  // agent demo loop
+  const scenes=[
+    {c:'var(--c1)',os:'只有幾年前的中文型錄，要怎麼生出數百支產品？',cmd:'根據這份型錄，幫我產出英文標題、關鍵字、詳情頁文案、配圖提示詞和 CTA',outs:['英文標題＋關鍵字','詳情頁文案','賣點配圖提示詞','引導詢盤的 CTA']},
+    {c:'var(--c2)',os:'詢盤來了，不知道先回哪個、要不要報價…',cmd:'幫我判斷這封詢盤的買家意圖，草擬英文回覆，列出要補問的問題和追單訊息',outs:['買家意圖與優先度','英文回覆草稿','補問清單','報價後追單訊息']},
+    {c:'var(--c3)',os:'後台一堆數字，看不出問題在哪…',cmd:'這是我近 30 天的店鋪數據，幫我診斷卡在哪一段，排出優化優先順序',outs:['卡點診斷','優化優先順序','批量優化建議','AI 直接調整']}
+  ];
+  if(reduce) return;
+  const osT=document.getElementById('osText'), cmdT=document.getElementById('cmdText'), outs=document.getElementById('outs'), bubble=document.getElementById('os');
+  let i=0;
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  async function play(){
+    const s=scenes[i%scenes.length];
+    outs.style.setProperty('--accent',s.c);
+    bubble.style.opacity=.2; await sleep(250); osT.textContent=s.os; bubble.style.opacity=1;
+    outs.innerHTML=s.outs.map(o=>`<li class="wait"><span class="tick">✓</span>${o}</li>`).join('');
+    cmdT.textContent='';
+    await sleep(700);
+    for(const ch of s.cmd){cmdT.textContent+=ch; await sleep(38);}
+    await sleep(400);
+    for(const li of outs.children){li.classList.remove('wait'); await sleep(420);}
+    await sleep(2600);
+    i++; play();
+  }
+  setTimeout(play,2600);
+
+  // soft dot field in hero
+  const cv=document.getElementById('dots'), ctx=cv.getContext('2d');
+  let w,h,pts=[];
+  function size(){const r=cv.getBoundingClientRect(); w=cv.width=r.width*devicePixelRatio; h=cv.height=r.height*devicePixelRatio;
+    pts=Array.from({length:46},(_,k)=>({x:Math.random()*w,y:Math.random()*h,r:(Math.random()*2+1)*devicePixelRatio,v:(Math.random()*.25+.08)*devicePixelRatio,c:['#ef6a1f','#0f8a7c','#3158e0'][k%3]}));}
+  function draw(){ctx.clearRect(0,0,w,h);
+    for(const p of pts){p.y-=p.v; if(p.y<-10){p.y=h+10;p.x=Math.random()*w;}
+      ctx.globalAlpha=.16; ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,7); ctx.fill();}
+    requestAnimationFrame(draw);}
+  size(); addEventListener('resize',size); draw();
+})();
+</script>
+</body>
+</html>
